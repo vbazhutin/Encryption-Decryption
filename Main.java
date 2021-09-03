@@ -1,25 +1,40 @@
 package encryptdecrypt;
 
-import java.util.Scanner;
-
 public class Main {
     public static void main(String[] args) {
-        Scanner in = new Scanner(System.in);
-        String action = in.nextLine();
-        String text = in.nextLine();
-        int key = in.nextInt();
 
-        System.out.println(encryptOrDecrypt(action, text, key));
-    }
+        String alg = "shift";
+        String mode = "enc";
+        int key = 0;
+        String text = "";
+        String in = null;
+        String out = null;
 
-    public static String encryptOrDecrypt(String action, String text, int key) {
-        StringBuilder sb = new StringBuilder();
-        if (action.equals("dec")) {
-            key = -key;
+        for (int i = 0; i < args.length; i += 2) {
+
+            switch (args[i]) {
+                case "-alg":
+                    alg = args[i + 1];
+                    break;
+                case "-mode":
+                    mode = args[i + 1];
+                    break;
+                case "-key":
+                    key = Integer.parseInt(args[i + 1]);
+                    break;
+                case "-data":
+                    text = args[i + 1];
+                    break;
+                case "-in":
+                    in = "./" + args[i + 1];
+                    break;
+                case "-out":
+                    out = "./" + args[i + 1];
+                    break;
+            }
         }
-        for (char ch : text.toCharArray()) {
-            sb.append((char) (ch + key));
-        }
-        return  sb.toString();
+
+        CipherFactory cipher = new CipherFactory();
+        cipher.toCipher(alg, mode, key, text, in, out);
     }
 }
